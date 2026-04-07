@@ -13,14 +13,17 @@ import org.bukkit.entity.EntityCategory
 import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemStack
 
-@Suppress("DEPRECATION", "unused") abstract class RaidEnchantment(key: NamespacedKey) : Enchantment(key) {
+@Suppress("DEPRECATION", "unused")
+abstract class RaidEnchantment(key: NamespacedKey) : Enchantment(key) {
     abstract override fun getMaxLevel(): Int
     override fun getStartLevel() = 1
-    @Deprecated("Deprecated in Java") override fun getName(): String = key.key
+    @Deprecated("Deprecated in Java")
+    override fun getName(): String = key.key
     override fun displayName(level: Int): Component = text(getName(), GRAY)
     override fun getItemTarget(): EnchantmentTarget = ALL
     override fun isTreasure() = false
-    @Deprecated("Deprecated in Java") override fun isCursed() = false
+    @Deprecated("Deprecated in Java")
+    override fun isCursed() = false
     override fun isTradeable() = false
     override fun isDiscoverable() = false
     override fun getRarity(): EnchantmentRarity = RARE
