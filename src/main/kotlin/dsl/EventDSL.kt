@@ -9,11 +9,16 @@ import org.bukkit.event.Listener
 import org.bukkit.plugin.Plugin
 import org.bukkit.event.Event as BukkitEvent
 
+@DslMarker
+annotation class EventDsl
+
 class EventListener : Listener
 typealias EventHandler<T> = T.() -> Unit
+
 fun Plugin.events(block: EventBuilder.() -> Unit): Listener = EventBuilder(this).apply(block).build()
 fun Plugin.unregisterAll() = unregisterAll(this)
 
+@EventDsl
 class EventBuilder(private val plugin: Plugin) {
 
     @PublishedApi

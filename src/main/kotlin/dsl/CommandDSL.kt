@@ -6,9 +6,13 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 
+@DslMarker
+annotation class CommandDsl
+
 typealias Executor = CommandSender.(args: Array<String>) -> Boolean
 typealias Completer = CommandSender.(args: Array<String>) -> List<String>?
 
+@CommandDsl
 class CommandDSL(
     val name: String,
     private var executor: Executor = { _ -> false },
@@ -63,8 +67,7 @@ class CommandDSL(
             val partials = subcommands.keys.filter { it.startsWith(args[0], ignoreCase = true) }
             if (partials.isNotEmpty()) return partials
         }
-        val fn = completer ?: return null
-        return sender.fn(args)
+        return completer?.let { sender.it(args) }
     }
 
     fun register(plugin: JavaPlugin) {
@@ -79,4 +82,5 @@ class CommandDSL(
     }
 }
 
-fun JavaPlugin.command(name: String, block: CommandDSL.() -> Unit): CommandDSL = CommandDSL(name).apply(block).also { it.register(this) }
+fun JavaPlugin.command(name: String, block: CommandDSL.() -> Unit): CommandDSL =
+    CommandDSL(name).apply(block).also { it.register(this) }
